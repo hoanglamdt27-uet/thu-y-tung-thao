@@ -93,7 +93,7 @@ class AppConfig:
                 return val
 
         # Đọc từ Environment Variable
-        env_key = os.getenv("OPENROUTER_API_KEY", "").strip()
+        env_key = os.getenv("OPENROUTER_API_KEY", "").replace("\r", "").replace("\n", "").strip()
         if env_key and env_key != "placeholder_key":
             return env_key
 
