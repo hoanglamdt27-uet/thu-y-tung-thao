@@ -10,3 +10,4 @@ if root_dir not in sys.path:
 from backend_api import app
 
 # Vercel Serverless Function nhận diện biến `app` (ASGI application)
+

@@ -116,6 +116,15 @@
             <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-400"></i>
             <span id="adminLoginErrorText">Mật khẩu không chính xác. Vui lòng thử lại.</span>
           </div>
+
+          <!-- Remember Login Checkbox -->
+          <div class="flex items-center justify-between text-xs text-slate-300 select-none pt-1">
+            <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+              <input type="checkbox" id="rememberDeviceCheckbox" checked
+                class="w-4 h-4 rounded bg-white/[0.08] border-white/[0.2] text-teal-500 focus:ring-teal-400 accent-teal-500 cursor-pointer">
+              <span class="text-xs">Ghi nhớ đăng nhập trên máy này</span>
+            </label>
+          </div>
         </div>
 
         <button type="submit" id="adminLoginSubmitBtn"
@@ -139,23 +148,35 @@
        ═══════════════════════════════════════════════════════════════════ -->
   <div class="relative z-10 flex min-h-screen">
 
-    <!-- ── LEFT SIDEBAR (Collapsible, Sleek Glassmorphism) ── -->
+    <!-- ── MOBILE BACKDROP OVERLAY ── -->
+    <div id="sidebarBackdrop" onclick="closeMobileSidebar()"
+      class="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
+
+    <!-- ── LEFT SIDEBAR (Slide-over on Mobile, Static on Desktop) ── -->
     <aside id="sidebar"
-      class="w-64 glass-panel border-r border-cardBorder flex flex-col justify-between py-5 px-4 transition-all duration-300 select-none z-30 shrink-0">
+      class="fixed lg:static inset-y-0 left-0 z-50 w-72 lg:w-64 glass-panel border-r border-cardBorder flex flex-col justify-between py-5 px-4 transition-transform duration-300 ease-in-out select-none shrink-0 -translate-x-full lg:translate-x-0 h-full">
       <div>
-        <!-- Brand -->
-        <div class="flex items-center gap-3 px-2 mb-6">
-          <div
-            class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-teal-500/20 border border-teal-400/30">
-            <i data-lucide="cross" class="w-5 h-5 text-white stroke-[2.5]"></i>
+        <!-- Brand + Mobile Close Button -->
+        <div class="flex items-center justify-between px-2 mb-6">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-teal-500/20 border border-teal-400/30 shrink-0">
+              <i data-lucide="cross" class="w-5 h-5 text-white stroke-[2.5]"></i>
+            </div>
+            <div class="overflow-hidden">
+              <h1 class="font-bold text-[15px] leading-tight text-white tracking-tight flex items-center gap-1.5">
+                Thú Y Tùng & Thảo
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              </h1>
+              <p class="text-[11px] text-slate-400 font-medium">Quản Trị Cửa Hàng & Phòng Khám</p>
+            </div>
           </div>
-          <div class="overflow-hidden">
-            <h1 class="font-bold text-[15px] leading-tight text-white tracking-tight flex items-center gap-1.5">
-              Thú Y Tùng & Thảo
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            </h1>
-            <p class="text-[11px] text-slate-400 font-medium">Quản Trị Cửa Hàng & Phòng Khám</p>
-          </div>
+          <!-- Mobile Close Button (X) -->
+          <button onclick="closeMobileSidebar()"
+            class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+            title="Đóng menu">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
         </div>
 
         <!-- Quick Search Inside Sidebar with Real Autocomplete Dropdown -->
@@ -271,19 +292,29 @@
 
       <!-- TOP BAR -->
       <header
-        class="glass-header sticky top-0 z-20 px-8 py-4 border-b border-cardBorder flex items-center justify-between gap-4">
-        <div>
-          <div class="text-xs text-slate-400 font-medium flex items-center gap-2" id="liveDateDisplay">
-            <span>Thời gian thực</span>
-            <span class="text-slate-600">·</span>
-            <span class="text-teal-400 font-semibold">Trung tâm điều hành</span>
+        class="glass-header sticky top-0 z-20 px-4 py-3 md:px-8 md:py-4 border-b border-cardBorder flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <!-- Mobile Hamburger Toggle Button -->
+          <button id="mobileMenuBtn" onclick="toggleMobileSidebar()"
+            class="lg:hidden p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-teal-300 hover:text-white transition-all shrink-0"
+            title="Mở danh mục menu">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+
+          <div class="min-w-0">
+            <div class="text-[11px] text-slate-400 font-medium flex items-center gap-1.5 truncate" id="liveDateDisplay">
+              <span>Thời gian thực</span>
+              <span class="text-slate-600">·</span>
+              <span class="text-teal-400 font-semibold">Trung tâm điều hành</span>
+            </div>
+            <h2 class="text-base sm:text-lg md:text-xl font-bold text-white tracking-tight truncate" id="greetingDisplay">
+              Chào buổi sáng, Bác sĩ Tùng & Thảo 👋
+            </h2>
           </div>
-          <h2 class="text-xl font-bold text-white tracking-tight" id="greetingDisplay">Chào buổi sáng, Bác sĩ Tùng &
-            Thảo 👋</h2>
         </div>
 
         <!-- Right System Indicators & Quick Actions -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
           <!-- Supabase Status Pill -->
           <div id="supabaseStatusPill"
             class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium">
@@ -299,22 +330,24 @@
           </button>
 
           <!-- Quick Action Buttons -->
-          <button onclick="openAddSaleModal()"
-            class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-emerald-300 text-xs font-bold transition-all">
+          <button onclick="openAddSaleModal()" title="Ghi Nhận Doanh Thu"
+            class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-emerald-300 text-xs font-bold transition-all">
             <i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-400"></i>
-            <span>+ Ghi Nhận Doanh Thu</span>
+            <span class="hidden sm:inline">+ Ghi Nhận Doanh Thu</span>
+            <span class="sm:hidden">+ Ghi Thu</span>
           </button>
 
-          <button onclick="openAddMedicineModal()"
-            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold shadow-lg shadow-teal-500/25 transition-all">
+          <button onclick="openAddMedicineModal()" title="Nhập Thuốc Mới"
+            class="flex items-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold shadow-lg shadow-teal-500/25 transition-all">
             <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i>
-            <span>+ Nhập Dược Phẩm</span>
+            <span class="hidden sm:inline">+ Nhập Dược Phẩm</span>
+            <span class="sm:hidden">+ Thuốc</span>
           </button>
         </div>
       </header>
 
       <!-- VIEW CONTAINER -->
-      <div class="p-8 space-y-8 flex-1">
+      <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 flex-1 pb-24 lg:pb-8">
 
         <!-- ═══════════════════════════════════════════════════════════════
              VIEW 1: DASHBOARD
@@ -981,6 +1014,38 @@
         </section>
 
       </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           MOBILE BOTTOM NAVIGATION DOCK (Native App Feel on Mobile)
+           ═══════════════════════════════════════════════════════════════ -->
+      <nav id="mobileBottomDock"
+        class="lg:hidden fixed bottom-0 left-0 right-0 z-30 glass-panel border-t border-cardBorder px-2 py-1.5 flex items-center justify-around select-none">
+        <button onclick="switchView('dashboard')" id="mob-nav-dashboard"
+          class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-teal-400 font-semibold transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span class="text-[10px]">Tổng quan</span>
+        </button>
+        <button onclick="switchView('inventory')" id="mob-nav-inventory"
+          class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-slate-400 font-medium hover:text-white transition-all">
+          <i data-lucide="package" class="w-4 h-4"></i>
+          <span class="text-[10px]">Kho dược</span>
+        </button>
+        <button onclick="switchView('patients')" id="mob-nav-patients"
+          class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-slate-400 font-medium hover:text-white transition-all">
+          <i data-lucide="paw-print" class="w-4 h-4"></i>
+          <span class="text-[10px]">Bệnh án</span>
+        </button>
+        <button onclick="switchView('sales')" id="mob-nav-sales"
+          class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-slate-400 font-medium hover:text-white transition-all">
+          <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+          <span class="text-[10px]">Sổ quỹ</span>
+        </button>
+        <button onclick="toggleMobileSidebar()"
+          class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-slate-400 font-medium hover:text-teal-400 transition-all">
+          <i data-lucide="menu" class="w-4 h-4"></i>
+          <span class="text-[10px]">Menu</span>
+        </button>
+      </nav>
     </main>
   </div>
 

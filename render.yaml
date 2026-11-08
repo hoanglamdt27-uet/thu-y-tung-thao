@@ -20,3 +20,4 @@ services:
       - key: SUPABASE_KEY
         sync: false
         value: "sb_publishable_Un7ci74dqscf0yEGfmJBkQ_4ZM4LP_B"
+

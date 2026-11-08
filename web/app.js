@@ -14,13 +14,32 @@ let state = {
   chartPeriod: 'month',
 };
 
+// ── Cookie & Persistence Helpers (Ensures 100% persistent login across mobile & Safari) ──
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+function setCookie(name, val, days) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(val)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${name}=; max-age=0; path=/;`;
+}
+
 // ── Admin Authentication Logic ──
 function checkAuth() {
-  const token = localStorage.getItem('tytt_admin_token');
+  const token = localStorage.getItem('tytt_admin_token') || getCookie('tytt_admin_token');
   const overlay = document.getElementById('adminLoginOverlay');
   if (!overlay) return true;
 
   if (token) {
+    // Re-sync if cookie existed (e.g. across browser restarts or webviews)
+    if (!localStorage.getItem('tytt_admin_token')) {
+      localStorage.setItem('tytt_admin_token', token);
+    }
     overlay.classList.add('auth-hidden');
     return true;
   } else {
@@ -68,7 +87,15 @@ async function handleAdminLogin(event) {
 
     if (res.ok) {
       const data = await res.json();
-      localStorage.setItem('tytt_admin_token', data.token || 'admin_session_valid');
+      const token = data.token || 'admin_session_valid';
+      localStorage.setItem('tytt_admin_token', token);
+
+      // Check "Remember this device"
+      const remember = document.getElementById('rememberDeviceCheckbox')?.checked;
+      if (remember !== false) {
+        setCookie('tytt_admin_token', token, 365); // Remember for 1 year
+        localStorage.setItem('tytt_remember_device', 'true');
+      }
 
       const overlay = document.getElementById('adminLoginOverlay');
       if (overlay) overlay.classList.add('auth-hidden');
@@ -119,6 +146,8 @@ async function handleAdminLogin(event) {
 function handleAdminLogout() {
   if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi quyền Quản trị?')) {
     localStorage.removeItem('tytt_admin_token');
+    localStorage.removeItem('tytt_remember_device');
+    deleteCookie('tytt_admin_token');
     const overlay = document.getElementById('adminLoginOverlay');
     if (overlay) {
       overlay.classList.remove('auth-hidden');
@@ -147,6 +176,44 @@ function togglePasswordVisibility(inputId, iconId) {
   if (window.lucide) lucide.createIcons();
 }
 
+// ── Mobile Responsive Sidebar Drawer Handlers ──
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+  const isClosed = sidebar.classList.contains('-translate-x-full');
+  if (isClosed) {
+    openMobileSidebar();
+  } else {
+    closeMobileSidebar();
+  }
+}
+
+function openMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (sidebar) sidebar.classList.remove('-translate-x-full');
+  if (backdrop) {
+    backdrop.classList.remove('hidden');
+    void backdrop.offsetWidth;
+    backdrop.classList.add('opacity-100');
+  }
+}
+
+function closeMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (sidebar && window.innerWidth < 1024) {
+    sidebar.classList.add('-translate-x-full');
+  }
+  if (backdrop) {
+    backdrop.classList.add('hidden');
+    backdrop.classList.remove('opacity-100');
+  }
+}
+
+window.toggleMobileSidebar = toggleMobileSidebar;
+window.openMobileSidebar = openMobileSidebar;
+window.closeMobileSidebar = closeMobileSidebar;
 window.checkAuth = checkAuth;
 window.handleAdminLogin = handleAdminLogin;
 window.handleAdminLogout = handleAdminLogout;
@@ -200,6 +267,22 @@ function switchView(viewName) {
     const navBtn = document.getElementById(`nav-${v}`);
     if (navBtn) navBtn.classList.remove('active');
   });
+
+  // Update mobile bottom dock active states
+  const mobViews = ['dashboard', 'inventory', 'patients', 'sales'];
+  mobViews.forEach(v => {
+    const btn = document.getElementById(`mob-nav-${v}`);
+    if (btn) {
+      if (v === viewName) {
+        btn.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-teal-400 font-semibold transition-all';
+      } else {
+        btn.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-slate-400 font-medium hover:text-white transition-all';
+      }
+    }
+  });
+
+  // Close mobile slide-over sidebar if open
+  closeMobileSidebar();
 
   // Show target section
   const targetView = document.getElementById(`view-${viewName}`);
