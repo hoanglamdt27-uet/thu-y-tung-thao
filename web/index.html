@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Thú Y Tùng & Thảo — Trung Tâm Quản Trị Cửa Hàng & Phòng Khám</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: '#070913',
+            surface: 'rgba(13, 19, 33, 0.72)',
+            cardBorder: 'rgba(255, 255, 255, 0.08)',
+            accentTeal: '#0f766e',
+            glowMint: '#10b981',
+            glowAmber: '#f59e0b',
+            glowCyan: '#06b6d4',
+            glowBlue: '#3b82f6',
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="/static/styles.css?v=2.2.2">
+</head>
+
+<body
+  class="bg-obsidian text-slate-100 font-sans min-h-screen overflow-x-hidden relative selection:bg-teal-500/30 selection:text-teal-200">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       LUMINOUS AMBIENT MESH GRADIENT ORBS (Exact style of @_code_and_chill_)
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div
+      class="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-amber-500/25 to-orange-600/10 blur-[130px] opacity-75 animate-pulse"
+      style="animation-duration: 8s;"></div>
+    <div
+      class="absolute -bottom-48 left-1/3 w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-emerald-500/20 via-teal-500/20 to-cyan-500/10 blur-[140px] opacity-80 animate-pulse"
+      style="animation-duration: 12s;"></div>
+    <div
+      class="absolute -bottom-20 -right-20 w-[480px] h-[480px] rounded-full bg-gradient-to-tl from-cyan-500/20 to-blue-600/15 blur-[120px] opacity-70">
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       ADMIN LOGIN SCREEN (Dark Luxury Obsidian Glassmorphism)
+       Khoá an toàn toàn bộ hệ thống cho đến khi Quản trị viên nhập mật khẩu
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="adminLoginOverlay" class="fixed inset-0 z-[100] bg-[#070913]/92 backdrop-blur-2xl flex items-center justify-center p-4">
+    <div class="glass-card w-full max-w-md p-8 border-white/[0.14] shadow-2xl shadow-teal-500/10 space-y-6 relative overflow-hidden auth-card-enter">
+      <!-- Ambient Glow Behind Card -->
+      <div class="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-teal-500/20 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-48 h-48 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
+
+      <!-- Header & Brand -->
+      <div class="text-center space-y-3 relative z-10">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-xl shadow-teal-500/30 border border-teal-400/40">
+          <i data-lucide="cross" class="w-8 h-8 text-white stroke-[2.5]"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-white tracking-tight">Thú Y Tùng & Thảo</h2>
+          <p class="text-xs text-slate-400 font-medium mt-1">Cổng Quản Trị Cửa Hàng & Phòng Khám</p>
+        </div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/25 text-[11px] text-teal-300 font-medium">
+          <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+          <span>Khu vực bảo mật Quản Trị Viên (Admin)</span>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="space-y-4 relative z-10">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            Mật khẩu Quản Trị
+          </label>
+          <div class="relative" id="adminPasswordInputWrap">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="password" id="adminPasswordInput" autocomplete="current-password" autofocus required
+              placeholder="Nhập mật khẩu quản trị..."
+              class="w-full bg-white/[0.05] border border-white/[0.12] hover:border-white/[0.2] focus:border-teal-400 rounded-xl pl-10 pr-11 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all font-mono">
+            <button type="button" onclick="togglePasswordVisibility('adminPasswordInput', 'passwordToggleIcon')"
+              class="absolute right-3 top-2.5 text-slate-400 hover:text-white p-0.5 transition-colors"
+              title="Hiện / Ẩn mật khẩu">
+              <i data-lucide="eye" id="passwordToggleIcon" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div id="adminLoginError" class="hidden mt-2.5 p-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-400"></i>
+            <span id="adminLoginErrorText">Mật khẩu không chính xác. Vui lòng thử lại.</span>
+          </div>
+        </div>
+
+        <button type="submit" id="adminLoginSubmitBtn"
+          class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-500 hover:opacity-95 text-white font-bold text-sm shadow-lg shadow-teal-500/30 transition-all flex items-center justify-center gap-2">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Đăng Nhập Quản Trị</span>
+        </button>
+      </form>
+
+      <!-- Footer Note -->
+      <div class="text-center pt-2 border-t border-cardBorder/60 relative z-10">
+        <p class="text-[11px] text-slate-500">
+          Mật khẩu mặc định: <span class="font-mono text-teal-400 font-semibold">admin</span> (có thể cấu hình trong secrets.toml hoặc biến môi trường)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       APPLICATION WRAPPER
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="relative z-10 flex min-h-screen">
+
+    <!-- ── LEFT SIDEBAR (Collapsible, Sleek Glassmorphism) ── -->
+    <aside id="sidebar"
+      class="w-64 glass-panel border-r border-cardBorder flex flex-col justify-between py-5 px-4 transition-all duration-300 select-none z-30 shrink-0">
+      <div>
+        <!-- Brand -->
+        <div class="flex items-center gap-3 px-2 mb-6">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-teal-500/20 border border-teal-400/30">
+            <i data-lucide="cross" class="w-5 h-5 text-white stroke-[2.5]"></i>
+          </div>
+          <div class="overflow-hidden">
+            <h1 class="font-bold text-[15px] leading-tight text-white tracking-tight flex items-center gap-1.5">
+              Thú Y Tùng & Thảo
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            </h1>
+            <p class="text-[11px] text-slate-400 font-medium">Quản Trị Cửa Hàng & Phòng Khám</p>
+          </div>
+        </div>
+
+        <!-- Quick Search Inside Sidebar with Real Autocomplete Dropdown -->
+        <div class="relative mb-6">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+          <input type="text" id="globalSearchInput" onkeydown="handleSearchKeyDown(event)"
+            oninput="handleSearchInput(event)" placeholder="Tìm kiếm thuốc, bệnh án... ⌘K" autocomplete="off"
+            class="w-full bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15] focus:border-teal-400/50 rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-teal-400/30 transition-all">
+
+          <!-- Floating Results Container -->
+          <div id="globalSearchResults" style="display: none;"
+            class="absolute left-0 right-0 top-11 z-50 glass-card p-2 border-teal-500/40 shadow-2xl max-h-96 overflow-y-auto space-y-2 text-xs">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <div class="space-y-6">
+          <!-- SHOP SECTION -->
+          <div>
+            <div class="px-2 mb-2 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider">Cửa Hàng (Shop)</div>
+            <nav class="space-y-1">
+              <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-item active">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                <span>Tổng quan</span>
+              </button>
+              <button onclick="switchView('inventory')" id="nav-inventory" class="nav-item">
+                <i data-lucide="package" class="w-4 h-4"></i>
+                <span>Kho dược Supabase</span>
+                <span id="badge-stock-count"
+                  class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-mono">8</span>
+              </button>
+              <button onclick="switchView('patients')" id="nav-patients" class="nav-item">
+                <i data-lucide="paw-print" class="w-4 h-4"></i>
+                <span>Hồ sơ bệnh án</span>
+                <span id="badge-patients-count"
+                  class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-white/[0.05] text-slate-400 font-mono">0</span>
+              </button>
+              <button onclick="switchView('sales')" id="nav-sales" class="nav-item">
+                <i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-400"></i>
+                <span>Sổ quỹ & Doanh thu</span>
+              </button>
+            </nav>
+          </div>
+
+          <!-- AI CLINICAL SECTION -->
+          <div>
+            <div class="px-2 mb-2 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider">Trí Tuệ Nhân Tạo (AI)
+            </div>
+            <nav class="space-y-1">
+              <button onclick="switchView('rag')" id="nav-rag" class="nav-item">
+                <i data-lucide="bot" class="w-4 h-4 text-emerald-400"></i>
+                <span>Bác sĩ ảo & Phác đồ</span>
+                <span
+                  class="ml-auto text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">RAG</span>
+              </button>
+              <button onclick="switchView('shopee')" id="nav-shopee" class="nav-item">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-orange-400"></i>
+                <span>Soạn bài Shopee SEO</span>
+              </button>
+              <button onclick="switchView('knowledge')" id="nav-knowledge" class="nav-item">
+                <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
+                <span>Kho tri thức lâm sàng</span>
+              </button>
+            </nav>
+          </div>
+
+          <!-- SYSTEM SECTION -->
+          <div>
+            <div class="px-2 mb-2 text-[10.5px] font-bold text-slate-400 uppercase tracking-wider">Hệ Thống</div>
+            <nav class="space-y-1">
+              <button onclick="switchView('settings')" id="nav-settings" class="nav-item">
+                <i data-lucide="settings" class="w-4 h-4"></i>
+                <span>Cài đặt & API</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom User Card -->
+      <div class="pt-4 border-t border-cardBorder">
+        <div class="flex items-center justify-between p-2 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-8 h-8 rounded-lg bg-teal-600/30 border border-teal-500/40 flex items-center justify-center text-teal-300 font-bold text-xs">
+              TT
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-white leading-tight">Bác sĩ Tùng & Thảo</div>
+              <div class="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                Quản trị viên
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <button onclick="showToast('Hệ thống đang hoạt động ở chế độ Quản trị an toàn')" title="Bảo mật Quản Trị"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-white transition-colors">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            </button>
+            <button onclick="handleAdminLogout()" title="Đăng xuất Admin"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT AREA ── -->
+    <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+
+      <!-- TOP BAR -->
+      <header
+        class="glass-header sticky top-0 z-20 px-8 py-4 border-b border-cardBorder flex items-center justify-between gap-4">
+        <div>
+          <div class="text-xs text-slate-400 font-medium flex items-center gap-2" id="liveDateDisplay">
+            <span>Thời gian thực</span>
+            <span class="text-slate-600">·</span>
+            <span class="text-teal-400 font-semibold">Trung tâm điều hành</span>
+          </div>
+          <h2 class="text-xl font-bold text-white tracking-tight" id="greetingDisplay">Chào buổi sáng, Bác sĩ Tùng &
+            Thảo 👋</h2>
+        </div>
+
+        <!-- Right System Indicators & Quick Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Supabase Status Pill -->
+          <div id="supabaseStatusPill"
+            class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Supabase Cloud</span>
+          </div>
+
+          <!-- AI Model Pill (Clickable to switch model in Settings) -->
+          <button onclick="switchView('settings')" id="headerModelBadge"
+            class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 text-cyan-300 text-xs font-medium transition-all" title="Bấm để đổi mô hình AI">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span id="headerModelText">Gemini 3.8 Flash (High)</span>
+          </button>
+
+          <!-- Quick Action Buttons -->
+          <button onclick="openAddSaleModal()"
+            class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-emerald-300 text-xs font-bold transition-all">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-400"></i>
+            <span>+ Ghi Nhận Doanh Thu</span>
+          </button>
+
+          <button onclick="openAddMedicineModal()"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold shadow-lg shadow-teal-500/25 transition-all">
+            <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i>
+            <span>+ Nhập Dược Phẩm</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW CONTAINER -->
+      <div class="p-8 space-y-8 flex-1">
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 1: DASHBOARD
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-dashboard" class="space-y-6">
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- LEFT 8 COLS: METRICS + SALES STUDIO CHART -->
+            <div class="lg:col-span-8 space-y-6">
+
+              <!-- 4 Top Stat Cards (Honest Real Data) -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <!-- Stat 1: Doanh thu hôm nay -->
+                <div class="glass-card p-4">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Hôm nay</div>
+                  <div class="text-2xl font-extrabold text-white tracking-tight" id="dash-today-rev">0 đ</div>
+                  <div class="mt-2 text-[11px] font-medium text-slate-400 flex items-center justify-between"
+                    id="dash-today-sub">
+                    <span>Chưa có giao dịch</span>
+                    <button onclick="openAddSaleModal()"
+                      class="text-teal-400 hover:underline text-[10.5px] font-semibold">+ Nhập</button>
+                  </div>
+                </div>
+
+                <!-- Stat 2: 7 ngày qua -->
+                <div class="glass-card p-4">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">7 ngày qua</div>
+                  <div class="text-2xl font-extrabold text-white tracking-tight" id="dash-week-rev">0 đ</div>
+                  <div class="mt-2 text-[11px] font-medium text-slate-400" id="dash-week-sub">
+                    Chưa phát sinh
+                  </div>
+                </div>
+
+                <!-- Stat 3: Tổng tồn kho (Real Supabase) -->
+                <div class="glass-card p-4">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Tổng tồn kho</div>
+                  <div class="text-2xl font-extrabold text-teal-400 tracking-tight" id="dash-total-items">400 <span
+                      class="text-xs text-slate-400 font-normal">đơn vị</span></div>
+                  <div class="mt-2 text-[11px] text-slate-400">
+                    Đang lưu <span id="dash-total-skus" class="text-white font-semibold">8</span> mã dược phẩm
+                  </div>
+                </div>
+
+                <!-- Stat 4: Cảnh báo hàng (Real Supabase) -->
+                <div class="glass-card p-4">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Cảnh báo tồn</div>
+                  <div class="text-2xl font-extrabold text-emerald-400 tracking-tight" id="dash-low-stock-count">An toàn
+                  </div>
+                  <div class="mt-2 text-[11px] text-emerald-400/80 flex items-center gap-1" id="dash-low-stock-sub">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                    <span>Tồn kho đạt chuẩn</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sales Studio Card (ZERO FAKE DATA: Canvas is hidden until real sales exist!) -->
+              <div class="glass-card p-6 relative overflow-hidden">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                  <div>
+                    <h3 class="text-base font-bold text-white tracking-tight">Doanh Thu & Giao Dịch Bán Hàng Thực Tế
+                    </h3>
+                    <p class="text-xs text-slate-400">Biểu đồ đường cong phát quang tự động cập nhật từ các hóa đơn thực
+                      tế</p>
+                  </div>
+
+                  <!-- Period Switcher Pills -->
+                  <div
+                    class="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/[0.08] text-xs">
+                    <button onclick="setChartPeriod('month')" class="chart-period-btn active" id="btn-chart-month">Tháng
+                      này</button>
+                    <button onclick="setChartPeriod('week')" class="chart-period-btn" id="btn-chart-week">7
+                      ngày</button>
+                    <button onclick="openAddSaleModal()"
+                      class="px-2.5 py-1 rounded-lg bg-teal-500/20 text-teal-300 font-bold hover:bg-teal-500/30 transition-all">+
+                      Ghi Đơn</button>
+                  </div>
+                </div>
+
+                <!-- Chart Canvas Container -->
+                <div class="h-64 w-full relative flex items-center justify-center">
+                  <!-- The canvas is completely HIDDEN with inline display: none when zero sales exist -->
+                  <canvas id="salesChart" class="w-full h-full" style="display: none;"></canvas>
+
+                  <!-- Real Empty State: Displayed when no sales logged yet -->
+                  <div id="chartEmptyState" style="display: flex;"
+                    class="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-obsidian/40 backdrop-blur-sm rounded-xl border border-white/[0.05]">
+                    <div
+                      class="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-400 mb-3">
+                      <i data-lucide="trending-up" class="w-6 h-6 text-teal-400/70"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-white">Chưa Có Dữ Liệu Giao Dịch Doanh Thu</h4>
+                    <p class="text-xs text-slate-400 max-w-md mt-1 mb-4 leading-relaxed">
+                      Biểu đồ phát quang sẽ tự động kích hoạt và vẽ các điểm mốc doanh thu thực tế ngay khi bạn ghi nhận
+                      các đơn thuốc hoặc hóa đơn bán hàng đầu tiên.
+                    </p>
+                    <button onclick="openAddSaleModal()"
+                      class="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-500/25 transition-all">
+                      <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                      <span>Ghi Nhận Doanh Thu Đầu Tiên</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Prescription & Diagnosis Assistant Banner -->
+              <div
+                class="glass-card p-5 bg-gradient-to-r from-teal-950/40 via-emerald-950/20 to-slate-900/40 border-teal-500/20 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 rounded-2xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-300 shrink-0">
+                    <i data-lucide="stethoscope" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-white">Trợ Lý Phác Đồ Đang Trực Tuyến</h4>
+                    <p class="text-xs text-slate-400">Hỏi đáp ngay các ca bệnh khò khè gà, E.Coli bại huyết vịt, heo
+                      tiêu chảy hoặc Parvo chó.</p>
+                  </div>
+                </div>
+                <button onclick="switchView('rag')"
+                  class="px-4 py-2 rounded-xl bg-teal-500/20 hover:bg-teal-500/30 border border-teal-400/30 text-teal-200 text-xs font-semibold whitespace-nowrap transition-all">
+                  Tư Vấn Ngay →
+                </button>
+              </div>
+
+            </div>
+
+            <!-- RIGHT 4 COLS: GOAL RING + SYSTEM CONNECTION STATUS -->
+            <div class="lg:col-span-4 space-y-6">
+
+              <!-- Monthly Goal Card (Circular Progress Gauge) -->
+              <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 class="text-sm font-bold text-white tracking-tight" id="goalTitleDisplay">Chỉ Tiêu Tháng</h3>
+                    <p class="text-xs text-slate-400">Tiến độ doanh thu phòng khám</p>
+                  </div>
+                  <!-- Real Edit Goal Button -->
+                  <button onclick="openEditGoalModal()"
+                    class="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-colors"
+                    title="Đặt lại mức chỉ tiêu">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-6 my-4">
+                  <!-- Circular SVG Progress Ring -->
+                  <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="9"
+                        fill="transparent" />
+                      <circle id="goalProgressCircle" cx="50" cy="50" r="40" stroke="url(#goalGradient)"
+                        stroke-width="9" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"
+                        stroke-linecap="round" class="transition-all duration-1000" />
+                      <defs>
+                        <linearGradient id="goalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#10b981" />
+                          <stop offset="100%" stop-color="#06b6d4" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                      <span class="text-xl font-extrabold text-white" id="goalPercentText">0%</span>
+                      <span class="text-[9px] text-slate-400 uppercase tracking-wider">Đạt được</span>
+                    </div>
+                  </div>
+
+                  <!-- Goal Stats List -->
+                  <div class="space-y-2 text-xs flex-1">
+                    <div>
+                      <div class="text-[10px] text-slate-400 uppercase font-semibold">Đã ghi nhận</div>
+                      <div class="font-bold text-white font-mono" id="goalRecordedText">0 đ</div>
+                    </div>
+                    <div>
+                      <div class="text-[10px] text-slate-400 uppercase font-semibold">Chỉ tiêu tháng</div>
+                      <div class="font-bold text-teal-400 font-mono" id="goalTargetDisplay">50.000.000 đ</div>
+                    </div>
+                    <div>
+                      <div class="text-[10px] text-slate-400 uppercase font-semibold">Tình trạng</div>
+                      <div class="font-medium text-slate-400" id="goalStatusHint">Sẵn sàng ghi nhận</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="w-full bg-white/[0.05] rounded-full h-1.5 mt-2 overflow-hidden">
+                  <div id="goalProgressBar"
+                    class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-1.5 rounded-full transition-all duration-700"
+                    style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- System Status & Connection (Honest, Real-time) -->
+              <div class="glass-card p-6 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Trạng Thái Hệ Thống</span>
+                  </div>
+                  <span class="text-[10.5px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-semibold">Cửa
+                    Hàng Nội Bộ</span>
+                </div>
+
+                <!-- Big Live Session Counter -->
+                <div class="my-3">
+                  <div class="flex items-baseline gap-2">
+                    <span class="text-4xl font-black text-white tracking-tight" id="liveVisitorCounter">1</span>
+                    <span class="text-xs text-slate-400 font-medium">quản trị viên đang trực tuyến</span>
+                  </div>
+                </div>
+
+                <!-- Animated Equalizer Bars (Live connection pulse) -->
+                <div class="flex items-end justify-between h-12 my-4 gap-1 px-1">
+                  <div class="eq-bar h-8" style="animation-delay: 0.1s"></div>
+                  <div class="eq-bar h-12" style="animation-delay: 0.3s"></div>
+                  <div class="eq-bar h-6" style="animation-delay: 0.5s"></div>
+                  <div class="eq-bar h-10" style="animation-delay: 0.2s"></div>
+                  <div class="eq-bar h-14" style="animation-delay: 0.4s"></div>
+                  <div class="eq-bar h-9" style="animation-delay: 0.6s"></div>
+                  <div class="eq-bar h-13" style="animation-delay: 0.15s"></div>
+                  <div class="eq-bar h-7" style="animation-delay: 0.35s"></div>
+                  <div class="eq-bar h-11" style="animation-delay: 0.45s"></div>
+                  <div class="eq-bar h-5" style="animation-delay: 0.25s"></div>
+                  <div class="eq-bar h-10" style="animation-delay: 0.55s"></div>
+                  <div class="eq-bar h-14" style="animation-delay: 0.2s"></div>
+                </div>
+
+                <!-- Real Mini Breakdown -->
+                <div class="pt-4 border-t border-cardBorder space-y-2 text-xs">
+                  <div class="flex justify-between text-slate-400">
+                    <span>Hồ sơ bệnh án đã lập:</span>
+                    <span class="text-white font-semibold font-mono" id="dash-stat-patients">0 ca</span>
+                  </div>
+                  <div class="flex justify-between text-slate-400">
+                    <span>Lượt tư vấn AI phiên này:</span>
+                    <span class="text-emerald-400 font-semibold font-mono" id="dash-stat-consults">0 lượt</span>
+                  </div>
+                  <div class="flex justify-between text-slate-400">
+                    <span>Mặt hàng có sẵn trong kho:</span>
+                    <span class="text-teal-300 font-medium truncate max-w-[150px]" id="dash-stat-top-item">BROMHEXINE
+                      PLUS 20ml</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 2: INVENTORY (KHO DƯỢC SUPABASE CLOUD)
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-inventory" class="hidden space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white">Quản Lý Tồn Kho Trực Tuyến</h3>
+                <p class="text-xs text-slate-400">Dữ liệu đồng bộ trực tiếp hai chiều với máy chủ PostgreSQL Supabase.
+                </p>
+              </div>
+
+              <!-- Search and Add -->
+              <div class="flex items-center gap-3">
+                <div class="relative w-64">
+                  <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                  <input type="text" id="inventorySearchInput" oninput="filterInventoryTable()"
+                    placeholder="Lọc theo tên hoặc mã SP..."
+                    class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-teal-400">
+                </div>
+                <button onclick="openAddMedicineModal()"
+                  class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-white text-xs font-bold flex items-center gap-2">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                  <span>Thêm Thuốc Mới</span>
+                </button>
+                <button onclick="exportInventoryCSV()"
+                  class="px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 text-xs font-medium flex items-center gap-1.5">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                  <span>Xuất Excel</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-xl border border-cardBorder">
+              <table class="w-full text-left text-xs">
+                <thead
+                  class="bg-white/[0.03] text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-cardBorder">
+                  <tr>
+                    <th class="py-3 px-4">Mã SP</th>
+                    <th class="py-3 px-4">Tên Thuốc / Chế Phẩm</th>
+                    <th class="py-3 px-4 text-center">Số Lượng Tồn</th>
+                    <th class="py-3 px-4 text-right">Giá Gốc</th>
+                    <th class="py-3 px-4 text-right">Giá Bán Lẻ</th>
+                    <th class="py-3 px-4 text-center">Trạng Thái</th>
+                    <th class="py-3 px-4 text-center">Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTableBody" class="divide-y divide-cardBorder">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 3: HỒ SƠ BỆNH ÁN (REAL PATIENT RECORDS - ZERO MOCK CARDS!)
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-patients" class="hidden space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white">Hồ Sơ Bệnh Án & Bệnh Nhân Vật Nuôi</h3>
+                <p class="text-xs text-slate-400">Theo dõi thông tin điều trị thực tế của khách hàng và đàn vật nuôi.
+                </p>
+              </div>
+              <button onclick="openAddPatientModal()"
+                class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-500/20">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>+ Lập Bệnh Án Mới</span>
+              </button>
+            </div>
+
+            <!-- Patient Cards Grid: Pure empty state by default, zero fake data! -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="patientCardsContainer">
+              <div
+                class="col-span-full p-8 text-center glass-card border-dashed border-white/[0.1] rounded-2xl space-y-3">
+                <div
+                  class="w-12 h-12 mx-auto rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-400">
+                  <i data-lucide="clipboard-list" class="w-6 h-6 text-teal-400"></i>
+                </div>
+                <h4 class="text-sm font-bold text-white">Chưa Có Hồ Sơ Bệnh Án Nào Được Tạo</h4>
+                <p class="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+                  Lập hồ sơ bệnh án để theo dõi chi tiết lịch sử khám bệnh, đàn gia súc/gia cầm, đơn thuốc đã kê và lịch
+                  hẹn tái khám của khách hàng thực tế.
+                </p>
+                <button onclick="openAddPatientModal()"
+                  class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-white text-xs font-bold inline-flex items-center gap-2 shadow-lg shadow-teal-500/20">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  <span>+ Lập Bệnh Án Đầu Tiên</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 4: SỔ QUỸ & DOANH THU (REAL TRANSACTIONS)
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-sales" class="hidden space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white">Sổ Quỹ & Lịch Sử Giao Dịch Doanh Thu</h3>
+                <p class="text-xs text-slate-400">Ghi nhận các hóa đơn bán lẻ tại quầy, toa thuốc điều trị và đơn hàng
+                  sỉ.</p>
+              </div>
+              <button onclick="openAddSaleModal()"
+                class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>+ Ghi Nhận Doanh Thu Mới</span>
+              </button>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-cardBorder">
+              <table class="w-full text-left text-xs">
+                <thead
+                  class="bg-white/[0.03] text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-cardBorder">
+                  <tr>
+                    <th class="py-3 px-4">Ngày GD</th>
+                    <th class="py-3 px-4">Nội Dung / Diễn Giải</th>
+                    <th class="py-3 px-4">Khách Hàng</th>
+                    <th class="py-3 px-4">Hình Thức</th>
+                    <th class="py-3 px-4 text-right">Số Tiền (VNĐ)</th>
+                    <th class="py-3 px-4 text-center">Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody id="salesTableBody" class="divide-y divide-cardBorder">
+                  <tr>
+                    <td colspan="6" class="text-center py-8 text-slate-400">Chưa có giao dịch bán hàng nào được ghi
+                      nhận. Bấm "+ Ghi Nhận Doanh Thu Mới" để bắt đầu.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 5: RAG CLINICAL AI ASSISTANT
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-rag" class="hidden space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
+                <i data-lucide="bot" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white">Bác Sĩ Ảo & Trợ Lý Phác Đồ Điều Trị (RAG AI)</h3>
+                <p class="text-xs text-slate-400">Truy vấn tri thức thú y nội bộ kết hợp mô hình Gemini Flash để lập
+                  phác đồ chính xác.</p>
+              </div>
+            </div>
+
+            <!-- Pre-built Disease Scenarios Pills -->
+            <div class="mb-4">
+              <div class="text-[11px] font-semibold text-slate-400 uppercase mb-2">Ca bệnh mẫu thường gặp:</div>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  onclick="fillRagPrompt('Đàn gà 35 ngày tuổi bị khò khè, vươn cổ ngáp, chảy nước mũi, phân xanh trắng, ăn kém.')"
+                  class="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-teal-500/20 border border-white/[0.08] hover:border-teal-400/30 text-xs text-slate-300 transition-all">
+                  🐔 Gà khò khè / CRD
+                </button>
+                <button
+                  onclick="fillRagPrompt('Đàn vịt 20 ngày tuổi bị bại chân, bơi xoay vòng, ngoẹo đầu, mắt có dử nhờn, chết nhanh.')"
+                  class="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-teal-500/20 border border-white/[0.08] hover:border-teal-400/30 text-xs text-slate-300 transition-all">
+                  🦆 Vịt bại huyết & E.Coli
+                </button>
+                <button
+                  onclick="fillRagPrompt('Đàn heo con mới cai sữa bị đi ngoài phân trắng tanh khắm, gầy sút, lông xù dựng.')"
+                  class="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-teal-500/20 border border-white/[0.08] hover:border-teal-400/30 text-xs text-slate-300 transition-all">
+                  🐷 Heo con phân trắng
+                </button>
+                <button
+                  onclick="fillRagPrompt('Chó cảnh 4 tháng tuổi nôn mửa ra bọt vàng liên tục, bỏ ăn, tiêu chảy ra máu mùi tanh khắm.')"
+                  class="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-teal-500/20 border border-white/[0.08] hover:border-teal-400/30 text-xs text-slate-300 transition-all">
+                  🐶 Parvo / Viêm ruột ở chó
+                </button>
+              </div>
+            </div>
+
+            <!-- Query Input Box -->
+            <div class="space-y-3">
+              <textarea id="ragQueryInput" rows="3"
+                placeholder="Mô tả triệu chứng bệnh, độ tuổi, loại vật nuôi và tiền sử tiêm phòng..."
+                class="w-full bg-white/[0.03] border border-white/[0.08] focus:border-teal-400/60 rounded-xl p-3.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-teal-400/30"></textarea>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] text-slate-400">💡 Mẹo: Càng chi tiết triệu chứng, phác đồ liều lượng càng
+                  chính xác.</span>
+                <button onclick="submitRagConsult()" id="btnSubmitRag"
+                  class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-500/20">
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                  <span>Lập Phác Đồ Điều Trị</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- AI Response Container -->
+            <div id="ragResponseContainer" class="hidden mt-6 pt-6 border-t border-cardBorder space-y-4">
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                  <i data-lucide="check-circle" class="w-4 h-4"></i>
+                  Phác Đồ Đề Xuất Từ Bác Sĩ Thú Y AI:
+                </h4>
+                <button onclick="copyRagResponse()"
+                  class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/[0.05]">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>Sao chép đơn</span>
+                </button>
+              </div>
+              <div id="ragResponseContent"
+                class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-wrap">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 6: SHOPEE SEO CONTENT GENERATOR
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-shopee" class="hidden space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-300">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white">Soạn Bài Đăng Shopee Chuẩn SEO & Lọc Từ Cấm Y Tế</h3>
+                <p class="text-xs text-slate-400">Tự động tra cứu tài liệu từ hãng, quét từ khóa vi phạm sàn Shopee và
+                  xuất bản bài viết tối ưu chuyển đổi.</p>
+              </div>
+            </div>
+
+            <!-- Input Form -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+              <div class="md:col-span-3">
+                <input type="text" id="shopeeProductNameInput"
+                  placeholder="VD: Bình xịt ruồi thông minh Sakan hoặc Bromhexine Plus 20ml..."
+                  class="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-orange-400">
+              </div>
+              <button onclick="generateShopeePost()" id="btnGenerateShopee"
+                class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-400 hover:to-amber-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Tạo Bài Chuẩn SEO</span>
+              </button>
+            </div>
+
+            <!-- Result Split Screen -->
+            <div id="shopeeResultContainer"
+              class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 pt-6 border-t border-cardBorder">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-xs font-bold text-white uppercase tracking-wider">Bài Đăng Hoàn Chỉnh (Shopee Ready)
+                  </h4>
+                  <button onclick="copyShopeePost()"
+                    class="text-xs text-orange-400 hover:text-orange-300 flex items-center gap-1">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span>Copy bài</span>
+                  </button>
+                </div>
+                <textarea id="shopeeResultText" rows="14"
+                  class="w-full bg-white/[0.02] border border-white/[0.08] rounded-xl p-3 text-xs text-slate-200 font-sans leading-relaxed"></textarea>
+              </div>
+
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-2">Tài Liệu Kỹ Thuật Hãng & Lọc Vi
+                  Phạm</h4>
+                <div
+                  class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300 mb-3">
+                  ✓ <b>Chính sách an toàn:</b> Đã thay thế các từ cấm y tế ("kháng sinh đặc hiệu", "chữa khỏi 100%")
+                  bằng từ ngữ hợp chuẩn sàn.
+                </div>
+                <div id="shopeeTechInfoText"
+                  class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-300 whitespace-pre-wrap max-h-[300px] overflow-y-auto">
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 7: KHO TRI THỨC LÂM SÀNG
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-knowledge" class="hidden space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-lg font-bold text-white">Kho Tri Thức Lâm Sàng Nội Bộ (RAG Knowledge)</h3>
+                <p class="text-xs text-slate-400">Các phác đồ điều trị và tài liệu hoạt chất thực tế đang được nạp cho
+                  AI.</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+                <span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px] font-bold">PHÁC ĐỒ</span>
+                <h4 class="text-xs font-bold text-white">Bệnh Khò Khè & CRD Ở Gà</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Kết hợp Bromhexine Plus giãn khí quản, Gluco K-C hạ
+                  sốt, kháng sinh Doxycycline + Tylosin.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+                <span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px] font-bold">PHÁC ĐỒ</span>
+                <h4 class="text-xs font-bold text-white">Bại Huyết & E.Coli Ở Vịt, Ngan</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Ceftiofur + Kanamycin tiêm liên tục 2-3 ngày, tăng lực
+                  giải độc gan thận Gluco K-C, sát trùng Povidine.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+                <span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px] font-bold">PHÁC ĐỒ</span>
+                <h4 class="text-xs font-bold text-white">Tiêu Chảy Phân Trắng Heo Con</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Enrofloxacin/Amoxicillin, Atropin giảm co thắt ruột,
+                  bù điện giải Oresol, tiêm bổ máu Fer B12.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+                <span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px] font-bold">PHÁC ĐỒ</span>
+                <h4 class="text-xs font-bold text-white">Cấp Cứu Parvo / Viêm Ruột Ở Chó</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Nhịn ăn uống đường miệng, truyền dịch tĩnh mạch liên
+                  tục, tiêm kháng sinh Cefotaxime, cầm máu Vitamin K.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             VIEW 8: SETTINGS & API CONFIGURATION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="view-settings" class="hidden space-y-6">
+          <div class="glass-card p-6 max-w-2xl space-y-6">
+            <div>
+              <h3 class="text-lg font-bold text-white mb-1">Cài Đặt Hệ Thống & Cấu Hình Trí Tuệ Nhân Tạo (AI)</h3>
+              <p class="text-xs text-slate-400">Tùy biến mô hình AI, mức độ suy luận lâm sàng (Reasoning Effort) và quản lý API Key OpenRouter.</p>
+            </div>
+
+            <!-- Model Selector Card -->
+            <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i data-lucide="cpu" class="w-4 h-4 text-cyan-400"></i>
+                    <span>Mô Hình AI Vận Hành (AI Model)</span>
+                  </h4>
+                  <p class="text-[11px] text-slate-400">Chọn mô hình phù hợp với nhu cầu tư vấn phác đồ và viết bài SEO</p>
+                </div>
+                <span id="currentModelBadgeText" class="px-2.5 py-1 rounded-lg bg-teal-500/20 text-teal-300 font-mono text-[11px] font-bold">
+                  Gemini 3.8 Flash (High)
+                </span>
+              </div>
+
+              <div class="space-y-3 text-xs">
+                <div>
+                  <label class="block text-slate-300 mb-1 font-medium">Chọn mô hình trong danh mục:</label>
+                  <select id="selectAiModel" onchange="handleModelPresetChange()" class="w-full bg-slate-900 border border-white/[0.1] rounded-xl p-2.5 text-white focus:outline-none focus:border-cyan-400">
+                    <option value="google/gemini-3.8-flash">⚡ [Khuyên Dùng] Gemini 3.8 Flash — Đỉnh cao suy luận y khoa & siêu tốc</option>
+                    <option value="google/gemini-2.5-flash">⚡ Gemini 2.5 Flash — Mô hình tiêu chuẩn, tiết kiệm chi phí</option>
+                    <option value="google/gemini-2.5-pro">🧠 Gemini 2.5 Pro — Phân tích dữ liệu học thuật chuyên sâu</option>
+                    <option value="custom">✏️ Nhập model tùy chỉnh khác...</option>
+                  </select>
+                </div>
+
+                <div id="customModelContainer" class="hidden">
+                  <label class="block text-slate-300 mb-1 font-medium">Mã mô hình tùy biến trên OpenRouter:</label>
+                  <input type="text" id="inputCustomModel" placeholder="VD: google/gemini-3.8-flash" class="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl p-2.5 text-white font-mono">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                  <div>
+                    <label class="block text-slate-300 mb-1 font-medium">Mức độ suy luận (Reasoning Effort):</label>
+                    <select id="selectReasoningEffort" class="w-full bg-slate-900 border border-white/[0.1] rounded-xl p-2.5 text-white focus:outline-none focus:border-cyan-400">
+                      <option value="high">High (Cao nhất - Chuẩn đoán bệnh lâm sàng đa bước)</option>
+                      <option value="medium">Medium (Cân bằng tốc độ & chất lượng)</option>
+                      <option value="low">Low (Tốc độ phản hồi nhanh nhất)</option>
+                    </select>
+                  </div>
+                  <div class="flex items-end">
+                    <button onclick="applyModelChange()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 text-white font-bold text-xs shadow-lg shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
+                      <i data-lucide="check" class="w-4 h-4"></i>
+                      <span>Áp Dụng Model Này</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- API Key Setting -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">OpenRouter API Key (AI Gateway):</label>
+              <div class="flex gap-2">
+                <input type="password" id="inputApiKeySetting" placeholder="sk-or-v1-..."
+                  class="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white">
+                <button onclick="saveApiKey()"
+                  class="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-white text-xs font-bold">
+                  Lưu Key
+                </button>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Khóa API dùng để gọi các dòng mô hình Google Gemini qua OpenRouter.</p>
+            </div>
+
+            <!-- Server Connection Status -->
+            <div class="pt-4 border-t border-cardBorder">
+              <div class="text-xs font-semibold text-slate-300 mb-2">Trạng thái kết nối máy chủ:</div>
+              <div class="space-y-2 text-xs">
+                <div class="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+                  <span class="text-slate-300">Supabase Cloud Database:</span>
+                  <span class="text-emerald-400 font-semibold" id="settingSupabaseStatus">Đang kiểm tra...</span>
+                </div>
+                <div class="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+                  <span class="text-slate-300">Mô hình AI đang kích hoạt:</span>
+                  <span class="text-cyan-400 font-mono font-bold" id="settingActiveModelName">google/gemini-3.8-flash (high)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MODAL 1: THÊM DƯỢC PHẨM MỚI (SUPABASE)
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="addMedicineModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md items-center justify-center p-4"
+    style="display: none;">
+    <div class="glass-card w-full max-w-md p-6 border-white/[0.15] shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-cardBorder">
+        <h3 class="text-base font-bold text-white">Thêm Thuốc Mới Vào Kho</h3>
+        <button onclick="closeAddMedicineModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Mã Sản Phẩm (*):</label>
+          <input type="text" id="new_ma_sp" placeholder="VD: SP009"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Tên Thuốc / Chế Phẩm (*):</label>
+          <input type="text" id="new_ten_sp" placeholder="VD: ENROFLOXACIN 10% 100ml"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Số Lượng:</label>
+            <input type="number" id="new_so_luong" value="50"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Giá Gốc (đ):</label>
+            <input type="number" id="new_gia_goc" value="25000"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Giá Bán (đ):</label>
+            <input type="number" id="new_gia_ban" value="38000"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 flex gap-2 justify-end">
+        <button onclick="closeAddMedicineModal()"
+          class="px-4 py-2 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 text-xs">Hủy</button>
+        <button onclick="submitNewMedicine()"
+          class="px-5 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-white font-bold text-xs">Lưu Lên
+          Supabase</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MODAL 2: LẬP HỒ SƠ BỆNH ÁN MỚI (REAL PATIENT)
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="addPatientModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md items-center justify-center p-4"
+    style="display: none;">
+    <div class="glass-card w-full max-w-lg p-6 border-white/[0.15] shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-cardBorder">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="paw-print" class="w-4 h-4 text-teal-400"></i>
+          Lập Hồ Sơ Bệnh Án Vật Nuôi Thực Tế
+        </h3>
+        <button onclick="closeAddPatientModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Tên Chủ Nuôi / Trang Trại (*):</label>
+            <input type="text" id="patient_owner" placeholder="VD: Anh Minh (Trại gà Tam Đảo)"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Số Điện Thoại:</label>
+            <input type="text" id="patient_phone" placeholder="VD: 0987 123 456"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Loại Vật Nuôi & Số Lượng (*):</label>
+          <input type="text" id="patient_animal" placeholder="VD: Đàn vịt thịt 1.500 con (25 ngày tuổi)"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Chẩn Đoán Bệnh Lâm Sàng (*):</label>
+          <input type="text" id="patient_diagnosis" placeholder="VD: Bại huyết ghép E.Coli, phân xanh trắng"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Phác Đồ & Thuốc Đã Kê (*):</label>
+          <textarea id="patient_prescription" rows="2"
+            placeholder="VD: Tiêm Ceftiofur + Kanamycin 3 ngày, pha Gluco K-C giải độc gan thận"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Trạng Thái Điều Trị:</label>
+            <select id="patient_status"
+              class="w-full bg-slate-900 border border-white/[0.1] rounded-lg p-2.5 text-white">
+              <option value="Đang điều trị">Đang điều trị</option>
+              <option value="Đã thuyên giảm">Đã thuyên giảm</option>
+              <option value="Đã khỏi hẳn">Đã khỏi hẳn</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Ngày Hẹn Tái Khám:</label>
+            <input type="date" id="patient_followup"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Ghi Chú Thêm:</label>
+          <input type="text" id="patient_notes" placeholder="VD: Đã dặn rắc vôi bột và phun sát trùng Povidine"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+      </div>
+
+      <div class="pt-3 flex gap-2 justify-end border-t border-cardBorder">
+        <button onclick="closeAddPatientModal()"
+          class="px-4 py-2 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 text-xs">Hủy</button>
+        <button onclick="submitNewPatient()"
+          class="px-5 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-white font-bold text-xs">Lưu Bệnh Án</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MODAL 3: GHI NHẬN DOANH THU / BÁN THUỐC THỰC TẾ
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md items-center justify-center p-4"
+    style="display: none;">
+    <div class="glass-card w-full max-w-md p-6 border-white/[0.15] shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-cardBorder">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-400"></i>
+          Ghi Nhận Doanh Thu Bán Hàng Thực Tế
+        </h3>
+        <button onclick="closeAddSaleModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Số Tiền Doanh Thu (VNĐ) (*):</label>
+          <input type="number" id="sale_amount" placeholder="VD: 350000"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white text-base font-bold font-mono">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Diễn Giải / Tên Thuốc Xuất Bán (*):</label>
+          <input type="text" id="sale_desc" placeholder="VD: Bán 2 chai Bromhexine Plus 20ml + 1 lọ Fer B12"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Khách Hàng:</label>
+            <input type="text" id="sale_customer" placeholder="VD: Bác Hùng hoặc Khách lẻ"
+              class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-medium">Hình Thức:</label>
+            <select id="sale_category"
+              class="w-full bg-slate-900 border border-white/[0.1] rounded-lg p-2.5 text-white">
+              <option value="Bán lẻ tại quầy">Bán lẻ tại quầy</option>
+              <option value="Toa điều trị lâm sàng">Toa điều trị lâm sàng</option>
+              <option value="Đơn hàng trang trại">Đơn hàng trang trại</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 mb-1 font-medium">Ngày Giao Dịch:</label>
+          <input type="date" id="sale_date"
+            class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white">
+        </div>
+      </div>
+
+      <div class="pt-3 flex gap-2 justify-end border-t border-cardBorder">
+        <button onclick="closeAddSaleModal()"
+          class="px-4 py-2 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 text-xs">Hủy</button>
+        <button onclick="submitNewSale()"
+          class="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs">Ghi Nhận Doanh
+          Thu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MODAL 4: CẬP NHẬT CHỈ TIÊU DOANH THU THÁNG
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="editGoalModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md items-center justify-center p-4"
+    style="display: none;">
+    <div class="glass-card w-full max-w-sm p-6 border-white/[0.15] shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-cardBorder">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="target" class="w-4 h-4 text-teal-400"></i>
+          <span>Đặt Chỉ Tiêu Doanh Thu Tháng</span>
+        </h3>
+        <button onclick="closeEditGoalModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="text-xs space-y-2">
+        <label class="block text-slate-300 font-medium">Mục Tiêu Tháng (VNĐ):</label>
+        <input type="number" id="input_monthly_goal_target" value="50000000"
+          class="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg p-2.5 text-white font-mono font-bold">
+        <p class="text-[11px] text-slate-400">Vòng tròn tiến độ sẽ tự động tính toán % đạt được dựa trên doanh thu thực
+          tế ghi nhận.</p>
+      </div>
+      <div class="pt-2 flex gap-2 justify-end border-t border-cardBorder">
+        <button onclick="closeEditGoalModal()"
+          class="px-4 py-2 rounded-lg bg-white/[0.05] text-slate-300 text-xs">Hủy</button>
+        <button onclick="submitEditGoal()"
+          class="px-5 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-white font-bold text-xs">Lưu Chỉ Tiêu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- Immediate Inline Action Handlers (Guarantees modals & actions ALWAYS work unconditionally) -->
+  <script>
+    window.openModal = function (id) {
+      const m = document.getElementById(id);
+      if (m) {
+        m.style.display = 'flex';
+        m.classList.remove('hidden');
+      }
+    };
+    window.closeModal = function (id) {
+      const m = document.getElementById(id);
+      if (m) {
+        m.style.display = 'none';
+        m.classList.add('hidden');
+      }
+    };
+
+    window.openAddSaleModal = function () {
+      const d = document.getElementById('sale_date');
+      if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+      window.openModal('addSaleModal');
+    };
+    window.closeAddSaleModal = function () {
+      window.closeModal('addSaleModal');
+    };
+
+    window.openEditGoalModal = function () {
+      const cur = (window.state && window.state.stats && window.state.stats.monthly_goal_target) || 50000000;
+      const input = document.getElementById('input_monthly_goal_target');
+      if (input) input.value = cur;
+      window.openModal('editGoalModal');
+    };
+    window.closeEditGoalModal = function () {
+      window.closeModal('editGoalModal');
+    };
+
+    window.openAddPatientModal = function () {
+      window.openModal('addPatientModal');
+    };
+    window.closeAddPatientModal = function () {
+      window.closeModal('addPatientModal');
+    };
+
+    window.openAddMedicineModal = function () {
+      window.openModal('addMedicineModal');
+    };
+    window.closeAddMedicineModal = function () {
+      window.closeModal('addMedicineModal');
+    };
+  </script>
+
+  <!-- App Logic with Dynamic Cache-Buster via Backend -->
+  <script src="/static/app.js?v=20261108_4"></script>
+</body>
+
+</html>
